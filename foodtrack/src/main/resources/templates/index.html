@@ -1,0 +1,73 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FoodTrack</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="columns">
+    <div class="column">
+        <nav class="panel">
+            <p class="panel-heading">
+                Food Database
+            </p>
+            <form th:action="@{/}" th:object="${search}" method="post">
+                <div class="panel-block">
+                    <p class="control has-icons-left">
+                        <input class="input" type="text" name="searchName" placeholder="Search" method="POST">
+                        <span class="icon is-left">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                    </p>
+                </div>
+            </form>
+            <tbody>
+            <tr th:if="${searchedFoods.empty}">
+                <a class="panel-block is-active">
+                    <span class="panel-icon">
+                        <i class="fa empty" aria-hidden="true"></i>
+                     </span>
+                    <td><span> Empty </span></td>
+                </a>
+            </tr>
+            <tr th:each="searchedFood : ${searchedFoods}">
+                <a class="panel-block is-active">
+                    <span class="panel-icon">
+                        <i class="fa fa-cutlery" aria-hidden="true"></i>
+                     </span>
+                    <td><span th:text="${searchedFood.name}"> Title </span></td>
+                </a>
+            </tr>
+            </tbody>
+        </nav>
+    </div>
+    <div class="column">
+        <nav class="panel is-info">
+            <p class="panel-heading">
+                Your Food List
+            </p>
+            <tbody>
+            <tr th:each="food : ${foods}">
+                <a class="panel-block is-active">
+                    <span class="panel-icon">
+                        <i class="fa fa-cutlery" aria-hidden="true"></i>
+                     </span>
+                    <td><span th:text="${food.name}"> Title </span></td>
+                </a>
+            </tr>
+            </tbody>
+        </nav>
+    </div>
+    <div class="column">
+        <nav class="panel is-info">
+            <p class="panel-heading">
+                Calorie Counter
+            </p>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
