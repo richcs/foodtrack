@@ -9,15 +9,17 @@
 </head>
 <body>
 <div class="columns">
-    <div class="column">
-        <nav class="panel">
+    <!-- FIRST COLUMN: FOOD SEARCH -->
+    <div class="column is-one-third">
+        <nav class="panel mt-2 ml-2">
             <p class="panel-heading">
                 Food Database
             </p>
-            <form th:action="@{/}" th:object="${search}" method="post">
+            <form th:action="@{/}" method="post">
                 <div class="panel-block">
                     <p class="control has-icons-left">
                         <input class="input" type="text" name="searchName" placeholder="Search" method="POST">
+                        <input type="hidden" name="action" value="search">
                         <span class="icon is-left">
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </span>
@@ -26,47 +28,100 @@
             </form>
             <tbody>
             <tr th:if="${searchedFoods.empty}">
-                <a class="panel-block is-active">
+                <label class="panel-block is-active">
                     <span class="panel-icon">
                         <i class="fa empty" aria-hidden="true"></i>
                      </span>
                     <td><span> Empty </span></td>
-                </a>
+                </label>
             </tr>
             <tr th:each="searchedFood : ${searchedFoods}">
-                <a class="panel-block is-active">
-                    <span class="panel-icon">
-                        <i class="fa fa-cutlery" aria-hidden="true"></i>
-                     </span>
-                    <td><span th:text="${searchedFood.name}"> Title </span></td>
-                </a>
+                <form th:action="@{/}" method="post">
+                <label class="panel-block is-active">
+                    <button class="button is-success is-small mr-2" type="submit" th:value="${searchedFood.name}" name="foodName">
+                        <span class="icon is-small">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </button>
+                    <input type="hidden" name="action" value="add">
+                    <td><span th:text="${searchedFood.name + ', ' + searchedFood.servingQty + ' ' + searchedFood.servingUnit}"> Title </span></td>
+                </label>
+                </form>
             </tr>
             </tbody>
         </nav>
     </div>
-    <div class="column">
-        <nav class="panel is-info">
-            <p class="panel-heading">
-                Your Food List
-            </p>
-            <tbody>
-            <tr th:each="food : ${foods}">
-                <a class="panel-block is-active">
-                    <span class="panel-icon">
-                        <i class="fa fa-cutlery" aria-hidden="true"></i>
-                     </span>
-                    <td><span th:text="${food.name}"> Title </span></td>
-                </a>
-            </tr>
-            </tbody>
-        </nav>
-    </div>
-    <div class="column">
-        <nav class="panel is-info">
-            <p class="panel-heading">
-                Calorie Counter
-            </p>
-        </nav>
+    <!-- SECOND COLUMN: MY FOODS -->
+    <div class="column is-two-thirds">
+        <div class="box mr-2 mt-2">
+            <article class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <h2 class="title is-3">Calorie Total</h2>
+                        <p>
+                            <strong>Total Calories:</strong>
+                            <span th:if="${myFoods.empty}"> 0 </span>
+                            <span th:text="${#aggregates.sum(myFoods.![calories])}"> 0 </span>
+                            <br>
+                            <strong>Total Carbohydrates:</strong>
+                            <span th:if="${myFoods.empty}"> 0 </span>
+                            <span th:text="${#aggregates.sum(myFoods.![carbohydrates])}"> 0 </span>
+                            <span>g</span>
+                            <br>
+                            <strong>Total Protein:</strong>
+                            <span th:if="${myFoods.empty}"> 0 </span>
+                            <span th:text="${#aggregates.sum(myFoods.![protein])}"> 0 </span>
+                            <span>g</span>
+                            <br>
+                            <strong>Total Fats:</strong>
+                            <span th:if="${myFoods.empty}"> 0 </span>
+                            <span th:text="${#aggregates.sum(myFoods.![fats])}"> 0 </span>
+                            <span>g</span>
+                            <br>
+                        </p>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <div class="table-container">
+            <table class="table is-striped is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Calories</th>
+                    <th>Carbohydrates</th>
+                    <th>Protein</th>
+                    <th>Fats</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${myFoods.empty}">
+                </tr>
+                <tr th:each="food,iterStat : ${myFoods}">
+                    <th><span th:text="${iterStat.count}"> # </span></th>
+                    <td><span th:text="${food.name}"> Name </span></td>
+                    <td><span th:text="${food.servingQty + ' ' + food.servingUnit}"> Quantity </span></td>
+                    <td><span th:text="${food.calories}"> Calories </span></td>
+                    <td><span th:text="${food.carbohydrates + ' g'}"> Carbohydrates </span></td>
+                    <td><span th:text="${food.protein + ' g'}"> Protein </span></td>
+                    <td><span th:text="${food.fats + ' g'}"> Fats </span></td>
+                    <td>
+                        <form th:action="@{/}" method="post">
+                            <button class="button is-danger is-small" type="submit" th:value="${food.name}" name="foodName">
+                                <span class="icon is-small">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </button>
+                            <input type="hidden" name="action" value="remove">
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>
