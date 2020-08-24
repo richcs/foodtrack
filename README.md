@@ -8,4 +8,4 @@
 
 ## Sample Image
 
-![DemoFoodTrack.](/foodtrack/demo/demo.png "This is a sample image.")
+![DemoFoodTrack.](/foodtrack/demo/demo.PNG "This is a sample image.")
