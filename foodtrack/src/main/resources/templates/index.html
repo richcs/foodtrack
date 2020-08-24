@@ -6,12 +6,13 @@
     <title>FoodTrack</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 </head>
 <body>
 <div class="columns">
     <!-- FIRST COLUMN: FOOD SEARCH -->
     <div class="column is-one-third">
-        <nav class="panel mt-2 ml-2">
+        <nav class="panel mt-2 ml-2 is-info">
             <p class="panel-heading">
                 Food Database
             </p>
@@ -79,6 +80,27 @@
                             <span>g</span>
                             <br>
                         </p>
+<!--                        <canvas id="myChart" width="50" height="50"></canvas>-->
+                        <script type="text/javascript" th:inline="javascript">
+                            var ctx = document.getElementById('myChart');
+                            var myPieChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: ["Carbohydrates", "Protein", "Fats"],
+                                    datasets: [{
+                                        label: "Source of Calories",
+                                        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
+                                        data: [100, 100, 100]
+                                    }]
+                                },
+                                options: {
+                                    title: {
+                                        display: true,
+                                        text: 'Source of Calories'
+                                    }
+                                }
+                            });
+                        </script>
                     </div>
                 </div>
             </article>

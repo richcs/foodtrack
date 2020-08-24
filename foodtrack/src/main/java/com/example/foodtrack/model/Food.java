@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.text.WordUtils;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Food implements Serializable {
@@ -14,15 +16,25 @@ public class Food implements Serializable {
 
     public String servingUnit;
 
-    public double servingQty;
+    public BigDecimal servingQty;
 
     public int calories;
 
-    public double carbohydrates;
+    public BigDecimal carbohydrates;
 
-    public double protein;
+    public BigDecimal protein;
 
-    public double fats;
+    public BigDecimal fats;
+
+    public BigDecimal originalQty;
+
+    public int originalCalories;
+
+    public BigDecimal originalCarbohydrates;
+
+    public BigDecimal originalProtein;
+
+    public BigDecimal originalFats;
 
     public Food(){
     }
@@ -35,13 +47,26 @@ public class Food implements Serializable {
                 @JsonProperty("nf_total_carbohydrate") double carbohydrates,
                 @JsonProperty("nf_protein") double protein,
                 @JsonProperty("nf_total_fat") double fats) {
-        name = WordUtils.capitalize(name);
-        this.name = name;
+        this.name = WordUtils.capitalize(name);
         this.servingUnit = servingUnit;
-        this.servingQty = servingQty;
+        this.servingQty = BigDecimal.valueOf(servingQty);
         this.calories = calories;
-        this.carbohydrates = carbohydrates;
-        this.protein = protein;
-        this.fats = fats;
+        this.carbohydrates = BigDecimal.valueOf(carbohydrates);
+        this.protein = BigDecimal.valueOf(protein);
+        this.fats = BigDecimal.valueOf(fats);
+        this.originalQty = this.servingQty;
+        this.originalCalories = this.calories;
+        this.originalCarbohydrates = this.carbohydrates;
+        this.originalProtein = this.protein;
+        this.originalFats = this.fats;
+
+    }
+
+    public void incrementFoodQty(){
+        servingQty = servingQty.add(originalQty);
+        calories = calories + originalCalories;
+        carbohydrates = carbohydrates.add(originalCarbohydrates);
+        protein = protein.add(originalProtein);
+        fats = fats.add(originalFats);
     }
 }

@@ -34,8 +34,20 @@ public class FoodController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST, params="action=add")
     private ModelAndView addFood(@RequestParam("foodName") String foodName, @RequestParam("action") String action){
-        Food newFood = sendFoodInfoRequest(foodName);
-        myFoods.add(newFood);
+        // If food item is already in myFoods list, increase quantity instead
+        boolean foodExists = false;
+        for(Food food : myFoods){
+            if(food.name.equals(foodName)){
+                food.incrementFoodQty();
+                foodExists = true;
+            }
+        }
+
+        if(!foodExists){
+            Food newFood = sendFoodInfoRequest(foodName);
+            myFoods.add(newFood);
+        }
+
         model.addObject("myFoods", myFoods);
         return model;
     }
