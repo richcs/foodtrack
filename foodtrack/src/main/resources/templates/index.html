@@ -58,49 +58,75 @@
             <article class="media">
                 <div class="media-content">
                     <div class="content">
-                        <h2 class="title is-3">Calorie Total</h2>
-                        <p>
-                            <strong>Total Calories:</strong>
-                            <span th:if="${myFoods.empty}"> 0 </span>
-                            <span th:text="${#aggregates.sum(myFoods.![calories])}"> 0 </span>
-                            <br>
-                            <strong>Total Carbohydrates:</strong>
-                            <span th:if="${myFoods.empty}"> 0 </span>
-                            <span th:text="${#aggregates.sum(myFoods.![carbohydrates])}"> 0 </span>
-                            <span>g</span>
-                            <br>
-                            <strong>Total Protein:</strong>
-                            <span th:if="${myFoods.empty}"> 0 </span>
-                            <span th:text="${#aggregates.sum(myFoods.![protein])}"> 0 </span>
-                            <span>g</span>
-                            <br>
-                            <strong>Total Fats:</strong>
-                            <span th:if="${myFoods.empty}"> 0 </span>
-                            <span th:text="${#aggregates.sum(myFoods.![fats])}"> 0 </span>
-                            <span>g</span>
-                            <br>
-                        </p>
-<!--                        <canvas id="myChart" width="50" height="50"></canvas>-->
-                        <script type="text/javascript" th:inline="javascript">
-                            var ctx = document.getElementById('myChart');
-                            var myPieChart = new Chart(ctx, {
-                                type: 'pie',
-                                data: {
-                                    labels: ["Carbohydrates", "Protein", "Fats"],
-                                    datasets: [{
-                                        label: "Source of Calories",
-                                        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
-                                        data: [100, 100, 100]
-                                    }]
-                                },
-                                options: {
-                                    title: {
-                                        display: true,
-                                        text: 'Source of Calories'
-                                    }
-                                }
-                            });
-                        </script>
+                        <div class="columns">
+                            <div class="column is-one-third">
+                                <h2 class="title is-3">Calorie Total</h2>
+                                <p>
+                                    <strong>Total Calories:</strong>
+                                    <span th:if="${myFoods.empty}"> 0 </span>
+                                    <span th:text="${#aggregates.sum(myFoods.![calories])}"> 0 </span>
+                                    <br>
+                                    <strong>Total Carbohydrates:</strong>
+                                    <span th:if="${myFoods.empty}"> 0 </span>
+                                    <span th:text="${#aggregates.sum(myFoods.![carbohydrates])}"> 0 </span>
+                                    <span>g</span>
+                                    <br>
+                                    <strong>Total Protein:</strong>
+                                    <span th:if="${myFoods.empty}"> 0 </span>
+                                    <span th:text="${#aggregates.sum(myFoods.![protein])}"> 0 </span>
+                                    <span>g</span>
+                                    <br>
+                                    <strong>Total Fats:</strong>
+                                    <span th:if="${myFoods.empty}"> 0 </span>
+                                    <span th:text="${#aggregates.sum(myFoods.![fats])}"> 0 </span>
+                                    <span>g</span>
+                                    <br>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <canvas id="myChart" width="10" height="50"></canvas>
+                                <script type="text/javascript" th:inline="javascript">
+                                    var ctx = document.getElementById('myChart');
+                                    /*<![CDATA[*/
+                                        var carbs = /*[[ ${#aggregates.sum(myFoods.![carbohydrates])} ]]*/[];
+                                        var protein = /*[[ ${#aggregates.sum(myFoods.![protein])} ]]*/[];
+                                        var fats = /*[[ ${#aggregates.sum(myFoods.![fats])} ]]*/[];
+                                        var total = carbs + protein + fats;
+                                        var carbsPercentage = Math.floor((carbs / total) * 100);
+                                        var proteinPercentage = Math.floor((protein / total) * 100);
+                                        var fatsPercentage = Math.floor((fats / total) * 100);
+                                    /*]]>*/
+                                    var myPieChart = new Chart(ctx, {
+                                        type: 'pie',
+                                        data: {
+                                            labels: ["Carbohydrates", "Protein", "Fats"],
+                                            datasets: [{
+                                                label: "Source of Calories",
+                                                backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
+                                                data: [carbsPercentage, proteinPercentage, fatsPercentage]
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            title: {
+                                                display: false
+                                            },
+                                            legend: {
+                                                display: false
+                                            },
+                                            tooltips: {
+                                                callbacks: {
+                                                    label: function(tooltipItem, data) {
+                                                        return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </article>
